@@ -16,4 +16,7 @@ func New(dsn string) (*Repository, error) {
 		return nil, err
 	}
 
+	return &Repository{
+		db: db,
+	}, nil
 }
