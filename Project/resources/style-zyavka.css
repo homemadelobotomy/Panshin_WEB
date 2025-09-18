@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans', Arial, sans-serif;
+    background: white;
+    overflow-x: hidden;
+}
+
+/* Основной контейнер */
+.page-container {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: white;
+    overflow: hidden;
+}
+
+/* Заголовок */
+.page-header {
+    width: 1920px;
+    height: 141px;
+    padding: 10px;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    background: #EFEFEF;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+}
+
+.page-header h1 {
+    color: #666666;
+    font-size: 40px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.page-header a {
+    text-decoration: none;
+}
+
+/* Новый блок с инсоляцией и результатом */
+.insolation-result-section {
+    width: 1165px;
+    left: 377px;
+    top: 206px;
+    position: absolute;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.insolation-block {
+    width: 360px;
+    height: 97px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+    display: flex;
+}
+
+.insolation-block label {
+    width: 314px;
+    height: 49px;
+    padding-left: 2px;
+    padding-right: 2px;
+    background: white;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    color: #1F1F1F;
+    font-size: 24px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.insolation-block input {
+    align-self: stretch;
+    flex: 1 1 0;
+    padding: 4px 5px;
+    border-radius: 4px;
+    outline: 1px #B9B9B9 solid;
+    border: none;
+    background: white;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    color: #6E6E6E;
+    font-size: 16px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+}
+
+.insolation-block input::placeholder {
+    color: #6E6E6E;
+}
+
+.result-block {
+    width: 305px;
+    height: 97px;
+    padding: 9px 4px;
+    background: #4A86E8;
+    border-radius: 12px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.result-title {
+    align-self: stretch;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 500;
+    word-wrap: break-word;
+}
+
+.result-value {
+    padding: 5px 41px;
+    background: white;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    color: #505050;
+    font-size: 20px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+/* Контейнер панелей */
+.panels-container {
+    width: 1165px;
+    height: auto;
+    left: 377px;
+    top: 340px; /* Увеличил отступ сверху, чтобы не перекрывать новый блок */
+    position: absolute;
+    gap: 40px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    display: flex;
+}
+
+/* Элемент панели */
+.panel-item {
+    align-self: stretch;
+    height: 190px;
+    border-radius: 4px;
+    outline: 1px #838383 solid;
+    box-shadow: -4px 3px 7.800000190734863px rgba(0, 0, 0, 0.25);
+    justify-content: flex-start;
+    align-items: center;
+    gap: 19px;
+    display: flex;
+}
+
+.panel-content {
+    flex: 1 1 0;
+    padding-right: 7px;
+    border-radius: 3px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 19px;
+    display: flex;
+}
+
+.panel-image {
+    width: 185px;
+    height: 187px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.panel-details {
+    flex: 1 1 0;
+    align-self: stretch;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    justify-content: space-between;
+    align-items: flex-start;
+    display: flex;
+}
+
+.panel-info {
+    width: 954px;
+    align-self: stretch;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    display: flex;
+}
+
+.panel-main-info {
+    width: 743px;
+    height: 47px;
+    padding: 6px 19px 4px 5px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.panel-title {
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
+    color: #064691;
+    font-size: 24px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.panel-power {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    color: #064691;
+    font-size: 20px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.panel-area-section {
+    flex: 1 1 0;
+    align-self: stretch;
+    padding-left: 9px;
+    padding-right: 9px;
+    border-left: 1px #B9B9B9 solid;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 13px;
+    display: flex;
+}
+
+.panel-area-section label {
+    align-self: stretch;
+    text-align: center;
+    color: black;
+    font-size: 16px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.panel-area-section input {
+    align-self: stretch;
+    height: 35px;
+    padding: 4px 5px;
+    border-radius: 4px;
+    outline: 1px #B9B9B9 solid;
+    border: none;
+    background: white;
+    color: #6E6E6E;
+    font-size: 14px;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-weight: 400;
+}
+
+.panel-area-section input::placeholder {
+    color: #6E6E6E;
+}
