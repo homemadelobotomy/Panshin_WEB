@@ -3,8 +3,6 @@ package handler
 import (
 	"lab/internal/app/repository"
 
-	"metoda/internal/app/repository"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -19,9 +17,11 @@ func NewHandler(r *repository.Repository) *Handler {
 	}
 }
 
-func (h *Handler) RegistrHandlers(router *gin.Engine) {
-	router.GET("/", h.GetSolarPanels)
+func (h *Handler) RegisterHandlers(router *gin.Engine) {
+	router.GET("/panels", h.GetSolarPanels)
 	router.GET("/panel/:id", h.GetSolarPanel)
+	router.GET("/request", h.GetSolarPanelRequest)
+
 }
 
 func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, err error) {
@@ -31,11 +31,7 @@ func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, err error)
 		"description": err.Error(),
 	})
 }
-
-func (h *Handler) GetSolarPanels(ctx *gin.Context) {
-
-}
-
-func (h *Handler) GetSolarPanel(ctx *gin.Context) {
-
+func (h *Handler) RegisterStatic(router *gin.Engine) {
+	router.LoadHTMLGlob("templates/*")
+	router.Static("/styles", "./resources/styles")
 }

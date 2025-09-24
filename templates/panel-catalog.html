@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Солнечные панели - Каталог</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="main-layout">
+            <!-- Заголовок -->
+            <header class="page-header">
+               <a href="/panels"><h1>СОЛНЕЧНЫЕ ПАНЕЛИ</h1></a>
+            </header>
+            
+            <!-- Поиск и уведомления -->
+                <div class="search-section">
+    <h1 class="search-title">Мощность</h1>
+    <div class="search-controls">
+        <form action="/panels" method="get" class="search-form">
+            <div class="search-container">
+                <div class="search-input">
+                    <input type="text" class="begin" placeholder="От" name="begin" value="{{.begin}}" autocomplete="off">
+                    <span class="range-separator">-</span>
+                    <input type="text" class="end" placeholder="До" name="end" value="{{.end}}" autocomplete="off">
+                </div>
+                <button class="search-btn" type="submit">Найти</button>
+            </div>
+        </form>
+        
+        <a href="/bid/1">
+            <button class="notification-btn">
+                <img src="styles/vector-50.svg" alt="Уведомления">
+                <span class="notification-badge">{{.count}}</span>
+            </button>
+        </a>
+    </div>
+</div>
+            
+            <!-- Каталог товаров -->
+            <div class="catalog-grid">
+               {{range .panels}}
+                <div class="product-card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">{{.Type}}</div>
+                            <div class="card-image-container">
+                                <img class="card-image" src="{{.Image}}" alt="Монокристаллические панели" />
+                            </div>
+                            <div class="card-power">Мощность {{.Power}} Вт</div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/panel/{{.ID}}">
+                            <button class="card-button" >
+                                <span class="button-text">Подробнее</span>
+                            </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

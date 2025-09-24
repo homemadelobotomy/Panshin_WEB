@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Солнечные панели </title>
+    <link rel="stylesheet" href="styles/style-zyavka.css">
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <a href="/panels"><h1>СОЛНЕЧНЫЕ ПАНЕЛИ</h1></a>
+        </header>
+        
+         <div class="insolation-result-section">
+            <div class="insolation-block">
+                <label for="insolation">Инсоляция в регионе</label>
+                <input type="text" id="insolation" placeholder="кВт·ч/м²" value="{{.request.Insolation}}">
+            </div>
+            <div class="result-block">
+                <div class="result-title">Итоговая мощность в день</div>
+                <div class="result-value">{{.request.TotalPower}} кВт</div>
+            </div>
+        </div>
+        
+        <div class="panels-container">
+            {{range .panels_requests}}
+            <div class="panel-item">
+                <div class="panel-content">
+                    <img src="{{.SolarPanel.Image}}" alt="Монокристаллические панели" class="panel-image">
+                    <div class="panel-details">
+                        <div class="panel-info">
+                            <div class="panel-main-info">
+                                <h3 class="panel-title">{{.SolarPanel.Type}}</h3>
+                                <div class="panel-power">Мощность {{.SolarPanel.Power}} Вт</div>
+                            </div>
+                            <div class="panel-area-section">
+                                <label for="area1">Площадь покрытия</label>
+                                <input type="text" id="area1" placeholder="м²" value="{{.Area}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</body>
+</html>

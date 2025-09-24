@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Солнечные панели — Детали</title>
+    <link rel="stylesheet" href="/styles/style-detail.css">
+</head>
+<body>
+    <div class="detail-page">
+        <header class="page-header">
+            <a href="/panels"><h1>СОЛНЕЧНЫЕ ПАНЕЛИ</h1></a>
+        </header>
+
+        <main class="detail-wrapper">
+            <img src="{{.panel.Image}}" alt="Поликристаллические панели" class="detail-img">
+
+            <section class="detail-info">
+                <h2 class="detail-title">{{.panel.Title}}</h2>
+
+                <h3 class="section-heading">Технические характеристики</h3>
+                <dl class="tech-specs">
+                    <div class="spec-row"><dt>Мощность</dt><dd>{{.panel.Power}} Вт</dd></div>
+                    <div class="spec-row"><dt>Тип</dt><dd>{{.panel.Type}}</dd></div>
+                    <div class="spec-row"><dt>Эффективность</dt><dd>{{.panel.Efficiency}} %</dd></div>
+                    <div class="spec-row"><dt>Размеры</dt><dd>{{.panel.Size}} мм</dd></div>
+                </dl>
+
+                <h3 class="section-heading">Описание</h3>
+                <p class="description">{{.panel.Description}}</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
