@@ -9,8 +9,8 @@ body {
     background: white;
     overflow-x: hidden;
 }
-a:active, /* активная/посещенная ссылка */
-a:hover,  /* при наведении */
+a:active, 
+a:hover,  
 a {
   text-decoration: none;
 }
@@ -27,7 +27,7 @@ a {
     display: flex;
 }
 
-/* Заголовок */
+
 .page-header {
     align-self: stretch;
     height: 141px;
@@ -171,6 +171,22 @@ a {
     background: #3672D9;
 }
 
+.ds-notification-btn:disabled{
+    width: 105px;
+    height: 42px;
+    padding: 0 19px;
+    background: #646c79;
+    border-radius: 6px;
+    outline: 1px #5b687e solid;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+
+    position: relative;
+}
+
 .notification-badge {
     height: 32px;
     padding: 10px;
@@ -191,7 +207,6 @@ a {
     min-width: 32px;
 }
 
-/* Каталог товаров */
 .catalog-grid {
     padding: 2px;
     width: 820px;
@@ -204,7 +219,6 @@ a {
     align-content: flex-start;
 }
 
-/* Карточка товара */
 .product-card {
     width: 251px;
     height: 448px;
@@ -287,10 +301,12 @@ a {
     justify-content: center;
     align-items: center;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .card-button {
-    width: 111px;
+    width: 150px;
     height: 32px;
     padding: 3px 9px;
     background: #4A86E8;

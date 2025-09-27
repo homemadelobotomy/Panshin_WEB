@@ -28,19 +28,25 @@
                 <button class="search-btn" type="submit">Найти</button>
             </div>
         </form>
-        
-        <a href="/bid/1">
-            <button class="notification-btn">
+            <form style="display: inline;" method="get" action="/request/{{.request_id}}">
+            {{if lt .count 1}}
+                <button  disabled class="ds-notification-btn" type="submit" >
+            {{else}}
+                <button class="notification-btn" type="submit">
+            {{end}}
                 <img src="styles/vector-50.svg" alt="Уведомления">
+                {{if gt .count 0}}
                 <span class="notification-badge">{{.count}}</span>
+                {{end}}
             </button>
-        </a>
+            </form>
     </div>
 </div>
             
             <!-- Каталог товаров -->
             <div class="catalog-grid">
                {{range .panels}}
+               
                 <div class="product-card">
                     <div class="card-content">
                         <div class="card-header">
@@ -51,11 +57,17 @@
                             <div class="card-power">Мощность {{.Power}} Вт</div>
                         </div>
                         <div class="card-footer">
-                            <a href="/panel/{{.ID}}">
-                            <button class="card-button" >
-                                <span class="button-text">Подробнее</span>
-                            </button>
-                            </a>
+                            
+                            <form action="/request.add/{{.ID}}" method="post" style="display:inline">
+                                <button type="submit" class="card-button">
+                                    <span class="button-text">Добавить в заявку</span>
+                                 </button>
+                            </form>
+                            <form action="/panel/{{.ID}}" method="get" style="display:inline">
+                                <button type="submit" class="card-button">
+                                    <span class="button-text">Подробнее</span>
+                                 </button>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -20,7 +20,9 @@ func NewHandler(r *repository.Repository) *Handler {
 func (h *Handler) RegisterHandlers(router *gin.Engine) {
 	router.GET("/panels", h.GetSolarPanels)
 	router.GET("/panel/:id", h.GetSolarPanel)
-	router.GET("/request", h.GetSolarPanelRequest)
+	router.GET("/request/:id", h.GetSolarPanelRequest)
+	router.POST("/request.add/:solarpanel_id", h.AddSolarPanelToRequest)
+	router.POST("/request/delete/:request_id", h.DeleteSolarPanelRequest)
 
 }
 

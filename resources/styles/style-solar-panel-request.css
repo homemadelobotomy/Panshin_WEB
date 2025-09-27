@@ -10,16 +10,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Основной контейнер */
-.page-container {
-    width: 1920px;
-    height: 1080px;
-    position: relative;
-    background: white;
-    overflow: hidden;
-}
-
-/* Заголовок */
 .page-header {
     width: 1920px;
     height: 141px;
@@ -46,7 +36,6 @@ body {
     text-decoration: none;
 }
 
-/* Новый блок с инсоляцией и результатом */
 .insolation-result-section {
     width: 1165px;
     left: 377px;
@@ -143,21 +132,21 @@ body {
     word-wrap: break-word;
 }
 
-/* Контейнер панелей */
+
 .panels-container {
     width: 1165px;
     height: auto;
     left: 377px;
-    top: 340px; /* Увеличил отступ сверху, чтобы не перекрывать новый блок */
+    top: 340px; 
     position: absolute;
     gap: 40px;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     display: flex;
+    padding-bottom: 10px;
 }
 
-/* Элемент панели */
 .panel-item {
     align-self: stretch;
     height: 190px;
@@ -278,3 +267,27 @@ body {
 .panel-area-section input::placeholder {
     color: #6E6E6E;
 }
+
+.delete-request-form {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+}
+
+.delete-request-btn {
+    background: #d9534f;
+    color: white;
+    font-family: 'Noto Sans', Arial, sans-serif;
+    font-size: 18px;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(217, 83, 79, 0.13);
+}
+
+.delete-request-btn:hover {
+    background: #c9302c;
+}
+

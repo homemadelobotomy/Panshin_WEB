@@ -10,10 +10,10 @@ type SolarPanelRequest struct {
 	CreatedAt      time.Time `gorm:"not null"`
 	CreatorId      int       `gorm:"not null"`
 	FormationDate  time.Time
-	DeleteDate     time.Time
-	CompletionDate time.Time
-	RejectionDate  time.Time
-	ModeratorID    int
+	DeleteDate     time.Time `gorm:"default:NULL"`
+	CompletionDate time.Time `gorm:"default:NULL"`
+	RejectionDate  time.Time `gorm:"default:NULL"`
+	ModeratorID    int       `gorm:"default:NULL"`
 	TotalPower     float64
 	Insolation     float64
 

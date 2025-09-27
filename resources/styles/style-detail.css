@@ -17,13 +17,13 @@ body {
   overflow: hidden;
   background: #ffffff;
 }
-a:active, /* активная/посещенная ссылка */
-a:hover,  /* при наведении */
+a:active, 
+a:hover,  
 a {
   text-decoration: none;
 }
 
-/* Шапка */
+
 .page-header {
   width: 100%;
   height: 141px;
@@ -43,7 +43,7 @@ a {
   font-weight: 600;
 }
 
-/* Основной блок */
+
 .detail-wrapper {
   position: absolute;
   left: 444px;
@@ -80,7 +80,7 @@ a {
   font-weight: 500;
 }
 
-/* Таблица характеристик */
+
 .tech-specs {
   display: flex;
   flex-direction: column;
@@ -106,7 +106,7 @@ a {
   font-weight: 500;
 }
 
-/* Описание */
+
 .description {
   color: #7D7D7D;
   font-size: 20px;
