@@ -13,7 +13,7 @@ func NewRepository() (*Repository, error) {
 	return &Repository{}, nil
 }
 
-type Solarpanel struct {
+type SolarPanel struct {
 	ID          int
 	Title       string
 	Type        string
@@ -22,14 +22,15 @@ type Solarpanel struct {
 	Size        string
 	Efficiency  string
 	Image       string
+	Area        float64
 }
 type Order struct {
 	ID    int
 	Title string
 }
 
-func (r *Repository) GetSolarpanels() ([]Solarpanel, error) {
-	panels := []Solarpanel{
+func (r *Repository) GetSolarPanels() ([]SolarPanel, error) {
+	panels := []SolarPanel{
 		{
 			ID:         1,
 			Title:      "",
@@ -37,16 +38,18 @@ func (r *Repository) GetSolarpanels() ([]Solarpanel, error) {
 			Power:      50,
 			Size:       "1640×992×35",
 			Efficiency: "20-22",
-			Image:      "http://172.19.0.2:9000/lab1/mono.jpeg",
+			Image:      "http://127.0.0.1:9000/images/mono.jpeg",
+			Area:       41,
 		},
 		{
 			ID:         2,
-			Title:      "",
+			Title:      "Самая лучшая панель",
 			Type:       "Поликристаллическая",
 			Power:      280,
 			Size:       "1640×992×35",
 			Efficiency: "20-22",
-			Image:      "http://172.19.0.2:9000/lab1/poly.jpeg",
+			Image:      "http://127.0.0.1:9000/images/poly.jpeg",
+			Area:       122,
 		},
 		{
 			ID:         3,
@@ -55,7 +58,8 @@ func (r *Repository) GetSolarpanels() ([]Solarpanel, error) {
 			Power:      40,
 			Size:       "1640×992×35",
 			Efficiency: "20-22",
-			Image:      "http://172.19.0.2:9000/lab1/tonko.jpeg",
+			Image:      "http://127.0.0.1:9000/images/tonko.jpeg",
+			Area:       5,
 		},
 		{
 			ID:         4,
@@ -64,7 +68,8 @@ func (r *Repository) GetSolarpanels() ([]Solarpanel, error) {
 			Power:      50,
 			Size:       "1640×992×35",
 			Efficiency: "20-22",
-			Image:      "http://172.19.0.2:9000/lab1/mono.jpeg",
+			Image:      "http://127.0.0.1:9000/images/mono.jpeg",
+			Area:       12,
 		},
 	}
 	if len(panels) == 0 {
@@ -73,32 +78,36 @@ func (r *Repository) GetSolarpanels() ([]Solarpanel, error) {
 	return panels, nil
 }
 
-func (r *Repository) GetSolarpanel(id int) (Solarpanel, error) {
-	panels, err := r.GetSolarpanels()
+func (r *Repository) GetSolarPanel(id int) (SolarPanel, error) {
+	panels, err := r.GetSolarPanels()
 
 	if err != nil {
 		logrus.Error("error while getting panel")
-		return Solarpanel{}, err
+		return SolarPanel{}, err
 	}
 	for _, panel := range panels {
 		if panel.ID == id {
 			return panel, nil
 		}
 	}
-	return Solarpanel{}, fmt.Errorf("can not find panel with id:%d", id)
+	return SolarPanel{}, fmt.Errorf("can not find panel with id:%d", id)
 }
 
-type panelBid struct {
-	Solarpanel
-	Area float64
+type SolarPanelRequest struct {
+	ID          int
+	Insolation  float64
+	Status      string
+	TotalPower  float64
+	SolarPanels []SolarPanel
+	Area        float64
 }
 
-func (r *Repository) GetSolarPanelsInRange(begin int, end int) ([]Solarpanel, error) {
-	panels, err := r.GetSolarpanels()
+func (r *Repository) GetSolarPanelsInRange(begin int, end int) ([]SolarPanel, error) {
+	panels, err := r.GetSolarPanels()
 	if err != nil {
-		return []Solarpanel{}, err
+		return []SolarPanel{}, err
 	}
-	result := []Solarpanel{}
+	result := []SolarPanel{}
 	for _, panel := range panels {
 		if panel.Power >= begin && panel.Power <= end {
 			result = append(result, panel)
@@ -106,36 +115,31 @@ func (r *Repository) GetSolarPanelsInRange(begin int, end int) ([]Solarpanel, er
 	}
 	return result, nil
 }
-func (r *Repository) GetBid(id int) ([]panelBid, error) {
-	bid := []panelBid{
-		{
-			Solarpanel: Solarpanel{
-				ID:         1,
-				Title:      "",
-				Type:       "Монокристаллическая",
-				Power:      50,
-				Size:       "1640×992×35",
-				Efficiency: "20-22",
-				Image:      "http://172.19.0.2:9000/lab1/mono.jpeg",
-			},
-			Area: 0,
-		},
-		{
-			Solarpanel: Solarpanel{
-				ID:         3,
-				Title:      "",
-				Type:       "Тонкопленочная",
-				Power:      40,
-				Size:       "1640×992×35",
-				Efficiency: "20-22",
-				Image:      "http://172.19.0.2:9000/lab1/tonko.jpeg",
-			},
-			Area: 0,
-		},
+func (r *Repository) GetSolarPanelsRequest(id int) (SolarPanelRequest, error) {
+	panel1, err := r.GetSolarPanel(1)
+	if err != nil {
+		logrus.Error(err)
+	}
+	panel2, err := r.GetSolarPanel(2)
+	if err != nil {
+		logrus.Error(err)
 	}
 
-	if len(bid) == 0 {
-		return nil, fmt.Errorf("bid is empty")
+	var solar_panels []SolarPanel
+	solar_panels = append(solar_panels, panel1, panel2)
+
+	solar_panel_request := SolarPanelRequest{
+		ID:          1,
+		Insolation:  22,
+		Status:      "черновик",
+		TotalPower:  30,
+		SolarPanels: solar_panels,
 	}
-	return bid, nil
+	SolarPanelRequests := make(map[int]SolarPanelRequest)
+	SolarPanelRequests[1] = solar_panel_request
+
+	if len(SolarPanelRequests) == 0 {
+		return SolarPanelRequest{}, fmt.Errorf("solarpanel request is empty")
+	}
+	return SolarPanelRequests[id], nil
 }

@@ -18,15 +18,15 @@ func NewHandler(r *repository.Repository) *Handler {
 		Repository: r,
 	}
 }
-func (h *Handler) GetSolarpanels(ctx *gin.Context) {
-	var panels []repository.Solarpanel
+func (h *Handler) GetSolarPanels(ctx *gin.Context) {
+	var panels []repository.SolarPanel
 	var err error
 	beginStr := ctx.Query("begin")
 	endStr := ctx.Query("end")
 	var begin, end int
 
 	if endStr == "" && beginStr == "" {
-		panels, err = h.Repository.GetSolarpanels()
+		panels, err = h.Repository.GetSolarPanels()
 		if err != nil {
 			logrus.Error(err)
 		}
@@ -58,7 +58,7 @@ func (h *Handler) GetSolarpanels(ctx *gin.Context) {
 		}
 
 	}
-	panelsInCart, err := h.Repository.GetBid(1)
+	panelsInCart, err := h.Repository.GetSolarPanelsRequest(1)
 	if err != nil {
 		logrus.Error(err)
 	}
@@ -66,17 +66,17 @@ func (h *Handler) GetSolarpanels(ctx *gin.Context) {
 		"panels":      panels,
 		"begin":       beginStr,
 		"end":         endStr,
-		"num_in_cart": len(panelsInCart),
+		"num_in_cart": len(panelsInCart.SolarPanels),
 	})
 }
 
-func (h *Handler) GetSolarpanel(ctx *gin.Context) {
+func (h *Handler) GetSolarPanel(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		logrus.Error(err)
 	}
-	panel, err := h.Repository.GetSolarpanel(id)
+	panel, err := h.Repository.GetSolarPanel(id)
 	if err != nil {
 		logrus.Error(err)
 	}
@@ -92,12 +92,12 @@ func (h *Handler) GetBid(ctx *gin.Context) {
 		logrus.Error(err)
 	}
 
-	bid, err := h.Repository.GetBid(id)
+	solar_panel_request, err := h.Repository.GetSolarPanelsRequest(id)
 	if err != nil {
 		logrus.Error(err)
 	}
 
-	ctx.HTML(http.StatusOK, "panel-bid.html", gin.H{
-		"bid": bid,
+	ctx.HTML(http.StatusOK, "panel-request.html", gin.H{
+		"request": solar_panel_request,
 	})
 }

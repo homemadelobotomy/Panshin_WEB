@@ -22,11 +22,11 @@ func StartServer() {
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/resources", "./resources")
-	r.GET("/panels", handler.GetSolarpanels)
-	r.GET("/panel/:id", handler.GetSolarpanel)
-	r.GET("/bid/:id", handler.GetBid)
+	r.GET("/panels", handler.GetSolarPanels)
+	r.GET("/panel/:id", handler.GetSolarPanel)
+	r.GET("/solar_panels_request/:id", handler.GetBid)
 
-	r.Run()
+	r.Run("127.0.0.1:8001")
 
 	log.Println("Server down")
 }
