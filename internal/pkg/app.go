@@ -10,26 +10,24 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type Application struct {
+type SolarPanelPowerCalculator struct {
 	Config  *config.Config
 	Router  *gin.Engine
 	Handler *handler.Handler
 }
 
-func NewApp(c *config.Config, r *gin.Engine, h *handler.Handler) *Application {
-	return &Application{
+func NewApp(c *config.Config, r *gin.Engine, h *handler.Handler) *SolarPanelPowerCalculator {
+	return &SolarPanelPowerCalculator{
 		Config:  c,
 		Router:  r,
 		Handler: h,
 	}
 }
 
-func (a *Application) RunApp() {
+func (a *SolarPanelPowerCalculator) RunApp() {
 	logrus.Info("Server start up")
 
 	a.Handler.RegisterHandlers(a.Router)
-	a.Handler.RegisterStatic(a.Router)
-
 	serverAddress := fmt.Sprintf("%s:%d", a.Config.ServiceHost, a.Config.ServicePort)
 	if err := a.Router.Run(serverAddress); err != nil {
 		logrus.Fatal(err)

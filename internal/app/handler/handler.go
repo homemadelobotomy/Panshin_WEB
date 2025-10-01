@@ -1,39 +1,38 @@
 package handler
 
 import (
-	"lab/internal/app/repository"
+	"lab/internal/app/service"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
-	Repository *repository.Repository
+	Service *service.Service
 }
 
-func NewHandler(r *repository.Repository) *Handler {
+var STATUS_CODES = map[int]string{
+	403: "Forbidden",
+	400: "Bad Request",
+	404: "Not Found",
+	500: "Internal Server Error",
+}
+
+func NewHandler(s *service.Service) *Handler {
 	return &Handler{
-		Repository: r,
+		Service: s,
 	}
 }
 
 func (h *Handler) RegisterHandlers(router *gin.Engine) {
-	router.GET("/panels", h.GetSolarPanels)
-	router.GET("/panel/:id", h.GetSolarPanel)
-	router.GET("/request/:id", h.GetSolarPanelRequest)
-	router.POST("/request.add/:solarpanel_id", h.AddSolarPanelToRequest)
-	router.POST("/request/delete/:request_id", h.DeleteSolarPanelRequest)
+	h.RegisterSolarPanelHandlers(router)
+	h.RegisterSolarPanelsRequestHandlers(router)
 
 }
 
-func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, err error) {
-	logrus.Error(err.Error())
+func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, message string) {
 	ctx.JSON(errorStatusCode, gin.H{
-		"status":      "error",
-		"description": err.Error(),
+		"status":  strconv.Itoa(errorStatusCode) + " " + STATUS_CODES[errorStatusCode],
+		"message": message,
 	})
-}
-func (h *Handler) RegisterStatic(router *gin.Engine) {
-	router.LoadHTMLGlob("templates/*")
-	router.Static("/styles", "./resources/styles")
 }

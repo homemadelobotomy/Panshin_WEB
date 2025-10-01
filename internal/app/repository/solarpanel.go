@@ -11,6 +11,22 @@ import (
 	"gorm.io/gorm"
 )
 
+func (r *Repository) GetFilteredSolarPanels(startValue float64, endValue float64) ([]ds.SolarPanel, error) {
+	//TODO Вернкть список панелей, если понадобится, то отсортированный. Обязательно проверить что выведет ctx.Param("start"), при пустых параметрах в запросе,
+	// если ошибку то можно ее обработать, но лучше разделить логику этого метода на два, с фильтрацией и без
+	return []ds.SolarPanel{}, nil
+}
+
+func (r *Repository) GetOneSolarPanel(panelId uint) (ds.SolarPanel, error) {
+	//TODO Вернуть одну панель по ее id
+	return ds.SolarPanel{}, nil
+}
+
+func (r *Repository) AddNewSolarPanel(solarPanel ds.SolarPanel) error {
+	//TODO Добавить новую панель без изображения
+	return nil
+}
+
 func (r *Repository) GetSolarPanels() ([]ds.SolarPanel, error) {
 	var panels []ds.SolarPanel
 
@@ -18,10 +34,6 @@ func (r *Repository) GetSolarPanels() ([]ds.SolarPanel, error) {
 
 	if err != nil {
 		return nil, err
-	}
-
-	if len(panels) == 0 {
-		return nil, fmt.Errorf("array is empty")
 	}
 
 	return panels, nil
@@ -49,12 +61,12 @@ func (r *Repository) GetSolarPanelsInRange(begin int, end int) ([]ds.SolarPanel,
 	return panels, nil
 }
 
-func (r *Repository) GetSolarPanelRequestID() (int, error) {
+func (r *Repository) GetSolarPanelRequestID() (uint, error) {
 	user_id := 1
 	solarpanel_request := &ds.SolarPanelRequest{}
 	err := r.db.Where("creator_id = ? AND status = 'черновик'", user_id).Preload("Panels.SolarPanel").First(&solarpanel_request).Error
 	if err != nil {
-		return -1, err
+		return 0, err
 	}
 	return solarpanel_request.ID, nil
 }
@@ -70,7 +82,7 @@ func (r *Repository) GetSolarPanelRequest(id int) (*ds.SolarPanelRequest, error)
 }
 
 func (r *Repository) GetNumberOfPanelsInRequest() (int64, error) {
-	userId := 1
+	var userId = ds.GetUser().GetId()
 	var requestId int
 	var count int64
 	err := r.db.Model(&ds.SolarPanelRequest{}).
@@ -93,14 +105,15 @@ func (r *Repository) GetNumberOfPanelsInRequest() (int64, error) {
 	return count, nil
 }
 
-func (r *Repository) AddSolarPanelToRequest(solarpanel_id int, user_id int) error {
+func (r *Repository) AddSolarPanelToRequest(solarpanel_id int) error {
+	userId := ds.GetUser().GetId()
 	var request ds.SolarPanelRequest
-	err := r.db.Where("creator_id = ? AND status = 'черновик'", user_id).
+	err := r.db.Where("creator_id = ? AND status = 'черновик'", userId).
 		First(&request).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			request = ds.SolarPanelRequest{
-				CreatorId: user_id,
+				CreatorId: userId,
 				Status:    "черновик",
 				CreatedAt: time.Now(),
 			}
@@ -121,13 +134,13 @@ func (r *Repository) AddSolarPanelToRequest(solarpanel_id int, user_id int) erro
 	return nil
 }
 
-func (r *Repository) DeleteSolarPanelRequest(request_id int) error {
-	err := r.db.Exec("UPDATE solar_panel_requests SET status='удален', delete_date = $1 WHERE id=$2 AND status='черновик'", time.Now(),request_id).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// func (r *Repository) DeleteSolarPanelRequest(request_id int) error {
+// 	err := r.db.Exec("UPDATE solar_panel_requests SET status='удален', delete_date = $1 WHERE id=$2 AND status='черновик'", time.Now(), request_id).Error
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func (r *Repository) CalculateTotalPower(request_id int) {
 	solar_panel_request, err := r.GetSolarPanelRequest(request_id)

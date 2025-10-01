@@ -7,6 +7,7 @@ import (
 	"lab/internal/app/dsn"
 	"lab/internal/app/handler"
 	"lab/internal/app/repository"
+	"lab/internal/app/service"
 	"lab/internal/pkg"
 
 	"github.com/gin-gonic/gin"
@@ -27,9 +28,10 @@ func main() {
 	if errRep != nil {
 		logrus.Fatalf("error initializing repository: %v", errRep)
 	}
+	serv := service.NewService(rep)
 
-	hand := handler.NewHandler(rep)
+	hand := handler.NewHandler(serv)
 
-	application := pkg.NewApp(conf, router, hand)
-	application.RunApp()
+	SolarPanelPowerCalculator := pkg.NewApp(conf, router, hand)
+	SolarPanelPowerCalculator.RunApp()
 }
