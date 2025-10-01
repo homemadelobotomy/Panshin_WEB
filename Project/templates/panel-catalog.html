@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Солнечные панели - Каталог</title>
+    <title>Солнечные панели</title>
     <link rel="stylesheet" href="../resources/style.css">
 </head>
 <body>
     <div class="page-container">
         <div class="main-layout">
-            <!-- Заголовок -->
+
             <header class="page-header">
                <a href="/panels"><h1>СОЛНЕЧНЫЕ ПАНЕЛИ</h1></a>
             </header>
             
-            <!-- Поиск и уведомления -->
                 <div class="search-section">
     <h1 class="search-title">Мощность</h1>
     <div class="search-controls">
@@ -29,7 +28,7 @@
             </div>
         </form>
         
-        <a href="/bid/1">
+        <a href="/solar_panels_request/1">
             <button class="notification-btn">
                 <img src="../resources/vector-50.svg" alt="Уведомления">
                 <span class="notification-badge">{{.num_in_cart}}</span>
@@ -38,7 +37,6 @@
     </div>
 </div>
             
-            <!-- Каталог товаров -->
             <div class="catalog-grid">
                {{range .panels}}
                 <div class="product-card">

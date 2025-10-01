@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Солнечные панели - Калькулятор</title>
+    <title>Солнечные панели </title>
     <link rel="stylesheet" href="../resources/style-zyavka.css">
 </head>
 <body>
@@ -15,16 +15,16 @@
          <div class="insolation-result-section">
             <div class="insolation-block">
                 <label for="insolation">Инсоляция в регионе</label>
-                <input type="text" id="insolation" placeholder="кВт·ч/м²">
+                <input type="text" id="insolation" placeholder="кВт·ч/м²" value="{{.request.Insolation}}">
             </div>
             <div class="result-block">
                 <div class="result-title">Итоговая мощность в день</div>
-                <div class="result-value">30 кВт</div>
+                <div class="result-value">{{.request.TotalPower}} кВт</div>
             </div>
         </div>
         
         <div class="panels-container">
-            {{range .bid}}
+            {{range .request.SolarPanels}}
             <div class="panel-item">
                 <div class="panel-content">
                     <img src="{{.Image}}" alt="Монокристаллические панели" class="panel-image">
@@ -36,7 +36,7 @@
                             </div>
                             <div class="panel-area-section">
                                 <label for="area1">Площадь покрытия</label>
-                                <input type="text" id="area1" placeholder="м²">
+                                <input type="text" id="area1" placeholder="м²" value="{{.Area}}">
                             </div>
                         </div>
                     </div>
