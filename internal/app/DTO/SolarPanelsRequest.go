@@ -18,10 +18,10 @@ type SolarPanelsRequestsResponse struct {
 }
 
 type OneSolarPanelRequestResponse struct {
-	ID         uint                 `json:"id"`
-	TotalPower float64              `json:"total_power"`
-	Insolation float64              `json:"insolation"`
-	Panels     []SolarPanelResponse `json:"solarpanels"`
+	ID         uint                            `json:"id"`
+	TotalPower float64                         `json:"total_power"`
+	Insolation float64                         `json:"insolation"`
+	Panels     []SolarPanelFromRequestResponse `json:"solarpanels"`
 }
 
 type ChangeSolarPanelRequest struct {

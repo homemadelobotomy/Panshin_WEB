@@ -11,7 +11,9 @@ import (
 
 func main() {
 	_ = godotenv.Load()
-	db, err := gorm.Open(postgres.Open(dsn.FromEnv()), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn.FromEnv()), &gorm.Config{
+		TranslateError: true,
+	})
 	if err != nil {
 		panic("failed to connect database")
 	}

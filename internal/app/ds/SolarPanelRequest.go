@@ -9,7 +9,7 @@ type SolarPanelRequest struct {
 	Status      string    `gorm:"not null"`
 	CreatedAt   time.Time `gorm:"not null"`
 	CreatorId   uint      `gorm:"not null"`
-	FormatedAt  time.Time
+	FormatedAt  time.Time `gorm:"default:NULL"`
 	DeletedAt   time.Time `gorm:"default:NULL"`
 	ModeratedAt time.Time `gorm:"default:NULL"`
 	ModeratorID uint      `gorm:"default:NULL"`

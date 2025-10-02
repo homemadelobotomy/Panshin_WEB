@@ -19,3 +19,14 @@ func FromEnv() string {
 
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, pass, dbname)
 }
+
+func GetMinioURL(filename string) string {
+	host := os.Getenv("MINIO_HOST")
+	if host == "" {
+		return ""
+	}
+
+	port := os.Getenv("MINIO_PORT")
+
+	return fmt.Sprintf("http://%s:%s/%s/%s", host, port, "images", filename)
+}

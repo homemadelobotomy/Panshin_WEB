@@ -1,15 +1,10 @@
 package service
 
 import (
-	"errors"
 	dto "lab/internal/app/DTO"
 	"lab/internal/app/ds"
 	"math"
 )
-
-var ErrNoRecords = errors.New("записи не найдены")
-var ErrForbidden = errors.New("пользователь не имеет доступа к этой заявке")
-var ErrBadRequest = errors.New("введены некорректные данные")
 
 func (s *Service) GetSolarPanelsInRequest(userId uint) (uint, int64, error) {
 	return s.repository.GetSolarPanelsInRequest(userId)
@@ -58,17 +53,19 @@ func (s *Service) GetOneSolarPanelRequest(requestId uint, userId uint) (dto.OneS
 }
 
 func (s *Service) ValidateSolarPanelRequestResponse(solarPanelRequest *ds.SolarPanelRequest) dto.OneSolarPanelRequestResponse {
-	var solarPanelsDTO []dto.SolarPanelResponse
+	var solarPanelsDTO []dto.SolarPanelFromRequestResponse
 	for _, requestPanel := range solarPanelRequest.Panels {
-		solarPanelsDTO = append(solarPanelsDTO, dto.SolarPanelResponse{
-			ID:       requestPanel.SolarPanel.ID,
-			Title:    requestPanel.SolarPanel.Title,
-			Type:     requestPanel.SolarPanel.Type,
-			Power:    requestPanel.SolarPanel.Power,
-			Image:    requestPanel.SolarPanel.Image,
-			IsDelete: requestPanel.SolarPanel.IsDelete,
-			Area:     requestPanel.Area,
-		})
+		if !requestPanel.SolarPanel.IsDelete {
+			solarPanelsDTO = append(solarPanelsDTO, dto.SolarPanelFromRequestResponse{
+				ID:       requestPanel.SolarPanel.ID,
+				Title:    requestPanel.SolarPanel.Title,
+				Type:     requestPanel.SolarPanel.Type,
+				Power:    requestPanel.SolarPanel.Power,
+				Image:    requestPanel.SolarPanel.Image,
+				IsDelete: requestPanel.SolarPanel.IsDelete,
+				Area:     requestPanel.Area,
+			})
+		}
 	}
 
 	response := dto.OneSolarPanelRequestResponse{

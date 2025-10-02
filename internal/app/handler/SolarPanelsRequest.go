@@ -14,13 +14,16 @@ import (
 )
 
 func (h *Handler) RegisterSolarPanelsRequestHandlers(router *gin.Engine) {
-	router.GET("/solarpanel-request-info", h.GetSolarPanelsInRequest)
-	router.GET("/solarpanel-requests", h.GetFilteredSolarPanelRequests)
-	router.GET("/solarpanel-request/:id", h.GetOneSolarPanelRequest)
-	router.PUT("/solarpanel-request/:id", h.ChangeSolarPanelRequest)
-	router.PUT("/solarpanel-request/:id/formate", h.FormateSolarPanelRequest)
-	router.PUT("/solarpanel-request/:id/moderate", h.ModeratorAction)
-	router.DELETE("/solarpanel-request/:id", h.DeleteSolarPanelRequest)
+	router.GET("/api/solarpanel-request-info", h.GetSolarPanelsInRequest)
+	solarPanelRequestGroups := router.Group("/api/solarpanel-requests")
+	{
+		solarPanelRequestGroups.GET("", h.GetFilteredSolarPanelRequests)
+		solarPanelRequestGroups.GET("/:id", h.GetOneSolarPanelRequest)
+		solarPanelRequestGroups.PUT("/:id", h.ChangeSolarPanelRequest)
+		solarPanelRequestGroups.PUT("/:id/formate", h.FormateSolarPanelRequest)
+		solarPanelRequestGroups.PUT("/:id/moderate", h.ModeratorAction)
+		solarPanelRequestGroups.DELETE("/:id", h.DeleteSolarPanelRequest)
+	}
 }
 
 func (h *Handler) GetSolarPanelsInRequest(ctx *gin.Context) {
@@ -31,7 +34,7 @@ func (h *Handler) GetSolarPanelsInRequest(ctx *gin.Context) {
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			h.errorHandler(ctx, http.StatusNotFound,
-				"can't find solar panel request for user")
+				"не удалось найти заявку пос олнечным панелям для пользователя")
 
 		} else {
 			h.errorHandler(ctx, http.StatusNotFound,
@@ -66,7 +69,7 @@ func (h *Handler) GetFilteredSolarPanelRequests(ctx *gin.Context) {
 		if err != nil {
 
 			h.errorHandler(ctx, http.StatusBadRequest,
-				"введен не верный формат start_date, правильный формат: dd-mm-yyyy hh:mm:ss")
+				"введен неверный формат start_date, правильный формат: dd-mm-yyyy hh:mm:ss")
 			return
 		}
 	} else {
@@ -77,7 +80,7 @@ func (h *Handler) GetFilteredSolarPanelRequests(ctx *gin.Context) {
 		endDate, err = time.Parse(layout, end_date)
 		if err != nil {
 			h.errorHandler(ctx, http.StatusBadRequest,
-				"введен не верный формат end_date, правильный формат: dd-mm-yyyy hh:mm:ss")
+				"введен неверный формат end_date, правильный формат: dd-mm-yyyy hh:mm:ss")
 			return
 		}
 	} else {
@@ -133,7 +136,7 @@ func (h *Handler) ChangeSolarPanelRequest(ctx *gin.Context) {
 	)
 	if err := ctx.BindJSON(&insolationRequest); err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest,
-			"введен не правильный формат тела запроса")
+			"введен неправильный формат тела запроса")
 		return
 	}
 	requestId, err := strconv.Atoi(ctx.Param("id"))
@@ -197,7 +200,7 @@ func (h *Handler) ModeratorAction(ctx *gin.Context) {
 	var action dto.ModeratorAction
 	if err = ctx.BindJSON(&action); err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest,
-			"введен не правильный формат тела запроса")
+			"введен неправильный формат тела запроса")
 		return
 	}
 	response, err := h.Service.ModeratorAction(uint(requestId), action.Action, ds.GetUser().GetId())

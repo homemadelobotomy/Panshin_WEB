@@ -27,7 +27,7 @@ func NewHandler(s *service.Service) *Handler {
 func (h *Handler) RegisterHandlers(router *gin.Engine) {
 	h.RegisterSolarPanelHandlers(router)
 	h.RegisterSolarPanelsRequestHandlers(router)
-
+	h.RegisterRequestPanelsHandlers(router)
 }
 
 func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, message string) {

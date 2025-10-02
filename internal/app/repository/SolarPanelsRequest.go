@@ -48,7 +48,9 @@ func (r *Repository) GetFilteredSolarPanelRequests(userId uint, filter dto.Solar
 func (r *Repository) GetOneSolarPanelRequest(requestId uint, status string) (ds.SolarPanelRequest, error) {
 	//TODO Вернуть черновик и его услуги
 	var solarPanelRequest ds.SolarPanelRequest
-	err := r.db.Where("id = ? AND status = ?", requestId, status).Preload("Panels.SolarPanel").First(&solarPanelRequest).Error
+	err := r.db.Where("id = ? AND status = ?", requestId, status).
+		Preload("Panels.SolarPanel").
+		First(&solarPanelRequest).Error
 	if err != nil {
 		return ds.SolarPanelRequest{}, err
 	}
