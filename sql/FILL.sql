@@ -2,11 +2,11 @@
 
 
 
-INSERT INTO "solar_panel_requests" ( "status", "created_at", "creator_id", "formation_date", "delete_date", "completion_date", "rejection_date", "moderator_id", "total_power", "insolation") VALUES
-('черновик',	'2025-09-19 08:00:00+00',	1,	'2025-09-19 09:00:00+00',	NULL,	NULL,	NULL,	NULL,	0,	4.5),
-('в обработке',	'2025-09-19 09:30:00+00',	2,	'2025-09-19 10:00:00+00',	NULL,	NULL,	NULL,	3,	0,	5.0),
-('отменен',	'2025-09-19 11:00:00+00',	1,	'2025-09-19 11:30:00+00',	NULL,	NULL,	'2025-09-19 12:30:00+00',	3,	0,	3.9),
-('завершен',	'2025-09-19 14:00:00+00',	2,	'2025-09-19 14:10:00+00',	NULL,	NULL,	'2025-09-19 15:10:00+00',	3,	140.0,	3.1);
+INSERT INTO "solar_panel_requests" ( "status", "created_at", "creator_id", "formated_at", "moderated_at", "moderator_id", "total_power", "insolation") VALUES
+('черновик',	'2025-09-19 08:00:00+00',	1,	NULL,	NULL,	NULL,	0,	4.5),
+('в обработке',	'2025-09-19 09:30:00+00',	2,	'2025-09-19 10:00:00+00',	NULL,	3,	0,	5.0),
+('отменен',	'2025-09-19 11:00:00+00',	1,	'2025-09-19 11:30:00+00',	'2025-09-19 12:30:00+00',	3,	0,	3.9),
+('завершен',	'2025-09-19 14:00:00+00',	2,	'2025-09-19 14:10:00+00',	'2025-09-19 15:10:00+00',	3,	140.0,	3.1);
 
 
 INSERT INTO "solar_panels" ("title", "type", "description", "power", "height", "width", "depth", "efficiency", "image") VALUES

@@ -28,7 +28,7 @@
                 <button class="search-btn" type="submit">Найти</button>
             </div>
         </form>
-            <form style="display: inline;" method="get" action="/request/{{.request_id}}">
+            <form style="display: inline;" method="get" action="/solarpanel-requests/{{.request_id}}">
             {{if lt .count 1}}
                 <button  disabled class="ds-notification-btn" type="submit" >
             {{else}}
@@ -58,12 +58,12 @@
                         </div>
                         <div class="card-footer">
                             
-                            <form action="/request.add/{{.ID}}" method="post" style="display:inline">
+                            <form action="/solarpanel-requests/{{.ID}}" method="post" style="display:inline">
                                 <button type="submit" class="card-button">
                                     <span class="button-text">Добавить в заявку</span>
                                  </button>
                             </form>
-                            <form action="/panel/{{.ID}}" method="get" style="display:inline">
+                            <form action="/panels/{{.ID}}" method="get" style="display:inline">
                                 <button type="submit" class="card-button">
                                     <span class="button-text">Подробнее</span>
                                  </button>

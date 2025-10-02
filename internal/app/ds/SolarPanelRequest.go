@@ -5,17 +5,15 @@ import (
 )
 
 type SolarPanelRequest struct {
-	ID             int       `gorm:"primaryKey"`
-	Status         string    `gorm:"not null"`
-	CreatedAt      time.Time `gorm:"not null"`
-	CreatorId      int       `gorm:"not null"`
-	FormationDate  time.Time
-	DeleteDate     time.Time `gorm:"default:NULL"`
-	CompletionDate time.Time `gorm:"default:NULL"`
-	RejectionDate  time.Time `gorm:"default:NULL"`
-	ModeratorID    int       `gorm:"default:NULL"`
-	TotalPower     float64
-	Insolation     float64
+	ID          int       `gorm:"primaryKey"`
+	Status      string    `gorm:"not null"`
+	CreatedAt   time.Time `gorm:"not null"`
+	CreatorId   int       `gorm:"not null"`
+	FormatedAt  time.Time `gorm:"default:NULL"`
+	ModeratedAt time.Time `gorm:"default:NULL"`
+	ModeratorID int       `gorm:"default:NULL"`
+	TotalPower  float64
+	Insolation  float64
 
 	Panels []RequestPanels `gorm:"foreignKey:SolarPanelRequestID"`
 }

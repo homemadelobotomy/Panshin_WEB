@@ -122,7 +122,7 @@ func (r *Repository) AddSolarPanelToRequest(solarpanel_id int, user_id int) erro
 }
 
 func (r *Repository) DeleteSolarPanelRequest(request_id int) error {
-	err := r.db.Exec("UPDATE solar_panel_requests SET status='удален', delete_date = $1 WHERE id=$2 AND status='черновик'", time.Now(),request_id).Error
+	err := r.db.Exec("UPDATE solar_panel_requests SET status='удален', formated_at = $1 WHERE id=$2 AND status='черновик'", time.Now(), request_id).Error
 	if err != nil {
 		return err
 	}
