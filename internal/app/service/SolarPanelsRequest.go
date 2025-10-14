@@ -150,13 +150,10 @@ func (s *Service) ModeratorAction(requestId uint, action string, moderatorId uin
 	}
 	panels := solarPanelRequest.Panels
 	insolation := solarPanelRequest.Insolation
-	power := 0.0
-	for _, panel := range panels {
-		power += float64(panel.SolarPanel.Power) * panel.Area / (float64(panel.SolarPanel.Width*panel.SolarPanel.Height) / 1000000)
+	totalPower := 0.0
+	if action == "завершен" {
+		totalPower = CalculateTotalPower(panels, insolation)
 	}
-
-	totalPower := power * insolation / 1000
-
 	err = s.repository.ModeratorAction(requestId, action, totalPower, moderatorId)
 	if err != nil {
 		return dto.OneSolarPanelRequestResponse{}, err

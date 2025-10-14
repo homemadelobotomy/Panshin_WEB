@@ -33,11 +33,12 @@ func (h *Handler) GetSolarPanelsInRequest(ctx *gin.Context) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			h.errorHandler(ctx, http.StatusNotFound,
-				"не удалось найти заявку пос олнечным панелям для пользователя")
-
+			ctx.JSON(http.StatusOK, dto.NumberOfPanelsResponse{
+				RequestId:      0,
+				NumberOfPanels: 0,
+			})
 		} else {
-			h.errorHandler(ctx, http.StatusNotFound,
+			h.errorHandler(ctx, http.StatusInternalServerError,
 				err.Error())
 		}
 		return

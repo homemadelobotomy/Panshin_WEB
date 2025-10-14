@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"lab/internal/app/ds"
 	"lab/internal/app/repository"
 	"log"
 	"net/url"
@@ -50,4 +51,13 @@ func extractFilenameFromURL(imageURL string) string {
 		return ""
 	}
 	return path.Base(parsedUrl.Path)
+}
+
+func CalculateTotalPower(panels []ds.RequestPanels, insolation float64) float64 {
+	power := 0.0
+	for _, panel := range panels {
+		power += float64(panel.SolarPanel.Power) * panel.Area / (float64(panel.SolarPanel.Width*panel.SolarPanel.Height) / 1000000)
+	}
+
+	return power * insolation / 1000
 }

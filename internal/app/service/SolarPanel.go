@@ -98,11 +98,13 @@ func (s *Service) AddSolarPanelToRequest(solarPanelId uint, userId uint) error {
 			if createErr != nil {
 				return createErr
 			}
+			solarPanelRequestId = solarPanelRequest.ID
 		} else {
 			return err
 		}
 
 	}
+
 	solarPanelRequest, err = s.repository.GetOneSolarPanelRequest(solarPanelRequestId, "черновик")
 	if err != nil {
 		return err
