@@ -3,6 +3,7 @@ package service
 import (
 	dto "lab/internal/app/DTO"
 	"lab/internal/app/ds"
+	"lab/internal/app/role"
 	"math"
 )
 
@@ -13,8 +14,19 @@ func (s *Service) GetSolarPanelsInRequest(userId uint) (uint, int64, error) {
 func (s *Service) GetFilteredSolarPanelRequests(
 	userId uint,
 	filter dto.SolarPanleRequestFilter,
+	userRole role.Role,
 ) ([]dto.SolarPanelsRequestsResponse, error) {
-	solarPanelRequests, err := s.repository.GetFilteredSolarPanelRequests(userId, filter)
+	var (
+		solarPanelRequests []ds.SolarPanelRequest
+		err                error
+	)
+	if userRole == role.Moderator {
+		solarPanelRequests, err = s.repository.GetAllFilteredSolarPanelRequests(filter)
+
+	} else {
+		solarPanelRequests, err = s.repository.GetFilteredSolarPanelRequests(userId, filter)
+
+	}
 	var solarPanelsRequestsResponse []dto.SolarPanelsRequestsResponse
 	layout := "02-01-2006 15:04:05"
 	if err != nil {

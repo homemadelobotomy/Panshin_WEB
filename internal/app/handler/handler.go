@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"lab/internal/app/config"
 	"lab/internal/app/service"
+	"lab/internal/redis"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +11,8 @@ import (
 
 type Handler struct {
 	Service *service.Service
+	Redis   *redis.Client
+	Config  *config.Config
 }
 
 var STATUS_CODES = map[int]string{
@@ -18,9 +22,11 @@ var STATUS_CODES = map[int]string{
 	500: "Internal Server Error",
 }
 
-func NewHandler(s *service.Service) *Handler {
+func NewHandler(s *service.Service, redis *redis.Client, c *config.Config) *Handler {
 	return &Handler{
 		Service: s,
+		Redis:   redis,
+		Config:  c,
 	}
 }
 

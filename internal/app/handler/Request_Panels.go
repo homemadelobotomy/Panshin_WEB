@@ -3,7 +3,8 @@ package handler
 import (
 	"errors"
 	dto "lab/internal/app/DTO"
-	"lab/internal/app/ds"
+	_ "lab/internal/app/ds"
+	"lab/internal/app/role"
 	"lab/internal/app/service"
 	"net/http"
 	"strconv"
@@ -12,20 +13,33 @@ import (
 	"gorm.io/gorm"
 )
 
-// import "github.com/gin-gonic/gin"
-
-// func (h *Handler) RegisterSolarRequestHandlers(router *gin.Engine) {
-// 	router.GET("/request/:id", h.GetSolarPanelRequest)
-// 	router.POST("/request.add/:solarpanel_id", h.AddSolarPanelToRequest)
-// 	router.POST("/request/delete/:request_id", h.DeleteSolarPanelRequest)
-// }
-
 func (h *Handler) RegisterRequestPanelsHandlers(router *gin.Engine) {
-	router.DELETE("/api/solarpanel-requests/:id/:solarpanelId", h.DeleteSolarPanelFromRequest)
-	router.PUT("/api/solarpanel-requests/:id/:solarpanelId", h.ChangeSolarPanelArea)
+	router.DELETE("/api/solarpanel-requests/:id/:solarpanelId", h.WithAuthCheck(role.User), h.DeleteSolarPanelFromRequest)
+	router.PUT("/api/solarpanel-requests/:id/:solarpanelId", h.WithAuthCheck(role.User), h.ChangeSolarPanelArea)
 }
 
+// DeleteSolarPanelFromRequest godoc
+// @Summary Удалить панель из заявки
+// @Description Удаляет солнечную панель из заявки пользователя
+// @Tags RequestPanels
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "ID заявки"
+// @Param solarpanelId path int true "ID солнечной панели"
+// @Success 200 {object} map[string]string "Панель успешно удалена"
+// @Failure 401 {object} map[string]string "Не авторизован"
+// @Failure 403 {object} map[string]string "Заявка недоступна / Панель отсутствует"
+// @Failure 404 {object} map[string]string "Заявка или панель не найдены"
+// @Failure 500 {object} map[string]string "Внутренняя ошибка сервера"
+// @Router /solarpanel-requests/{id}/{solarpanelId} [delete]
 func (h *Handler) DeleteSolarPanelFromRequest(ctx *gin.Context) {
+	userId, exists := GetUserIdFromContext(ctx)
+	if !exists {
+		h.errorHandler(ctx, http.StatusUnauthorized, "не авторизован")
+		return
+	}
+
 	requestId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		h.errorHandler(ctx, http.StatusNotFound,
@@ -39,7 +53,7 @@ func (h *Handler) DeleteSolarPanelFromRequest(ctx *gin.Context) {
 		return
 	}
 
-	err = h.Service.DeleteSolarPanelFromRequest(ds.GetUser().GetId(), uint(requestId), uint(solarPanelId))
+	err = h.Service.DeleteSolarPanelFromRequest(userId, uint(requestId), uint(solarPanelId))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			h.errorHandler(ctx, http.StatusNotFound,
@@ -61,7 +75,30 @@ func (h *Handler) DeleteSolarPanelFromRequest(ctx *gin.Context) {
 	})
 }
 
+// ChangeSolarPanelArea godoc
+// @Summary Изменить площадь панели в заявке
+// @Description Обновляет значение площади для панели в заявке
+// @Tags RequestPanels
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "ID заявки"
+// @Param solarpanelId path int true "ID солнечной панели"
+// @Param area body dto.ChangeSolarPanelAreaRequest true "Новое значение площади"
+// @Success 200 {object} ds.RequestPanels "Обновленная панель в заявке"
+// @Failure 400 {object} map[string]string "Некорректное значение площади"
+// @Failure 401 {object} map[string]string "Не авторизован"
+// @Failure 403 {object} map[string]string "Заявка недоступна этому пользователю"
+// @Failure 404 {object} map[string]string "Заявка или панель не найдены"
+// @Failure 500 {object} map[string]string "Внутренняя ошибка сервера"
+// @Router /solarpanel-requests/{id}/{solarpanelId} [put]
 func (h *Handler) ChangeSolarPanelArea(ctx *gin.Context) {
+
+	userId, exists := GetUserIdFromContext(ctx)
+	if !exists {
+		h.errorHandler(ctx, http.StatusUnauthorized, "не авторизован")
+		return
+	}
 	requestId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		h.errorHandler(ctx, http.StatusNotFound,
@@ -82,7 +119,7 @@ func (h *Handler) ChangeSolarPanelArea(ctx *gin.Context) {
 			"введен неправильный формат тела запроса")
 		return
 	}
-	response, err := h.Service.ChangeSolarPanelAreaInRequest(ds.GetUser().GetId(), uint(requestId), uint(solarPanelId), area.Area)
+	response, err := h.Service.ChangeSolarPanelAreaInRequest(userId, uint(requestId), uint(solarPanelId), area.Area)
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

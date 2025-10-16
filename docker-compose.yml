@@ -36,6 +36,15 @@ services:
     depends_on:
       - postgres
     
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6380:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass password
+    volumes:
+      - redis-data:/data
+    
   minio1:
     <<: *minio-common
     hostname: minio1
@@ -80,6 +89,10 @@ services:
 
 volumes:
   postgres_data:
+  postgresdb-data:
+    driver: local
+  redis-data:
+    driver: local
   data1-1:
   data1-2:
   data2-1:

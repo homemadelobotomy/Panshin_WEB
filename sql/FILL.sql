@@ -33,7 +33,7 @@
 
 -- Пользователи (включая модераторов)
 INSERT INTO "users" ("login", "password", "is_moderator") VALUES
-('ivanov',    'hashedpass1',  '1'),
+('ivanov',    'hashedpass1',  '0'),
 ('petrov',    'hashedpass2',  '0'),
 ('sidorov',   'hashedpass3',  '0'),
 ('admin',     'hashedadmin',  '1'),

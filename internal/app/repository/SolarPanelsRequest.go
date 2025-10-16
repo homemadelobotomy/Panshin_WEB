@@ -44,6 +44,26 @@ func (r *Repository) GetFilteredSolarPanelRequests(userId uint, filter dto.Solar
 	}
 	return solarPanelRequests, nil
 }
+func (r *Repository) GetAllFilteredSolarPanelRequests(filter dto.SolarPanleRequestFilter) ([]ds.SolarPanelRequest, error) {
+	//TODO Вернуть заявки для пользователя, кроме заявок со статусом удален и черновик, отфильтрованные по дате и статусу
+	// так же заменить поля модератора и создателя на логины
+	var solarPanelRequests []ds.SolarPanelRequest
+	db := r.db.Model(&ds.SolarPanelRequest{}).Where("status NOT IN ('черновик','удален')")
+	if filter.Status != "" {
+		db = db.Where("status = ?", filter.Status)
+	}
+	if !filter.Start_date.IsZero() {
+		db = db.Where("formated_at >= ?", filter.Start_date)
+	}
+	if !filter.End_date.IsZero() {
+		db = db.Where("formated_at <= ?", filter.End_date)
+	}
+	err := db.Preload("Creator").Preload("Moderator").Find(&solarPanelRequests).Error
+	if err != nil {
+		return []ds.SolarPanelRequest{}, err
+	}
+	return solarPanelRequests, nil
+}
 
 func (r *Repository) GetOneSolarPanelRequest(requestId uint, status string) (ds.SolarPanelRequest, error) {
 	//TODO Вернуть черновик и его услуги

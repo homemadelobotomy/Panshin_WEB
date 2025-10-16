@@ -1,0 +1,1238 @@
+basePath: /api
+definitions:
+  lab_internal_app_DTO.AddSolarPanel:
+    properties:
+      depth:
+        type: integer
+      description:
+        type: string
+      efficiency:
+        type: string
+      height:
+        type: integer
+      power:
+        type: number
+      title:
+        type: string
+      type:
+        type: string
+      width:
+        type: integer
+    required:
+    - depth
+    - efficiency
+    - height
+    - power
+    - title
+    - type
+    - width
+    type: object
+  lab_internal_app_DTO.ChangeSolarPanel:
+    properties:
+      depth:
+        type: integer
+      description:
+        type: string
+      efficiency:
+        type: string
+      height:
+        type: integer
+      power:
+        type: number
+      title:
+        type: string
+      type:
+        type: string
+      width:
+        type: integer
+    type: object
+  lab_internal_app_DTO.ChangeSolarPanelAreaRequest:
+    properties:
+      area:
+        type: number
+    required:
+    - area
+    type: object
+  lab_internal_app_DTO.ChangeSolarPanelRequest:
+    properties:
+      insolation:
+        type: number
+    required:
+    - insolation
+    type: object
+  lab_internal_app_DTO.ChangeUserData:
+    properties:
+      login:
+        type: string
+    type: object
+  lab_internal_app_DTO.LoginReq:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  lab_internal_app_DTO.LoginRes:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        $ref: '#/definitions/time.Duration'
+      token_type:
+        type: string
+    type: object
+  lab_internal_app_DTO.ModeratorAction:
+    properties:
+      action:
+        type: string
+    required:
+    - action
+    type: object
+  lab_internal_app_DTO.NumberOfPanelsResponse:
+    properties:
+      panels_in_request:
+        type: integer
+      request_id:
+        type: integer
+    type: object
+  lab_internal_app_DTO.OneSolarPanelRequestResponse:
+    properties:
+      id:
+        type: integer
+      insolation:
+        type: number
+      solarpanels:
+        items:
+          $ref: '#/definitions/lab_internal_app_DTO.SolarPanelFromRequestResponse'
+        type: array
+      total_power:
+        type: number
+    type: object
+  lab_internal_app_DTO.SolarPanelFromRequestResponse:
+    properties:
+      area:
+        type: number
+      id:
+        type: integer
+      image:
+        type: string
+      is_deleted:
+        type: boolean
+      power:
+        type: number
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  lab_internal_app_DTO.SolarPanelsRequestsResponse:
+    properties:
+      created_at:
+        type: string
+      creator:
+        type: string
+      formated_at:
+        type: string
+      id:
+        type: integer
+      insolation:
+        type: number
+      moderated_at:
+        type: string
+      moderator:
+        type: string
+      status:
+        type: string
+      total_power:
+        type: number
+    type: object
+  lab_internal_app_DTO.UserDataResposne:
+    properties:
+      id:
+        type: integer
+      login:
+        type: string
+    type: object
+  lab_internal_app_DTO.UserRegistration:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    required:
+    - login
+    - password
+    type: object
+  lab_internal_app_ds.RequestPanels:
+    properties:
+      area:
+        type: number
+      solar_panel_id:
+        type: integer
+      solar_panel_request_id:
+        type: integer
+      solarPanel:
+        $ref: '#/definitions/lab_internal_app_ds.SolarPanel'
+    type: object
+  lab_internal_app_ds.SolarPanel:
+    properties:
+      depth:
+        type: integer
+      description:
+        type: string
+      efficiency:
+        type: string
+      height:
+        type: integer
+      id:
+        type: integer
+      image:
+        type: string
+      isDelete:
+        type: boolean
+      power:
+        type: number
+      title:
+        type: string
+      type:
+        type: string
+      width:
+        type: integer
+    type: object
+  time.Duration:
+    enum:
+    - -9223372036854775808
+    - 9223372036854775807
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    format: int64
+    type: integer
+    x-enum-varnames:
+    - minDuration
+    - maxDuration
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+host: localhost:8001
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API для управления солнечными панелями и расчета их мощности
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Solar Panels Power Calculator API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Выполняет вход в систему и возвращает JWT токен
+      parameters:
+      - description: Логин и пароль
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT токен и информация о сессии
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.LoginRes'
+        "400":
+          description: Некорректные данные
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Неверный логин или пароль
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Авторизация пользователя
+      tags:
+      - Users
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет JWT токен в черный список
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный выход
+        "400":
+          description: Некорректный токен
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Выход из системы
+      tags:
+      - Users
+  /panels:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список всех солнечных панелей с возможностью фильтрации
+        по мощности
+      parameters:
+      - description: Минимальная мощность для фильтрации
+        in: query
+        name: start_value
+        type: number
+      - description: Максимальная мощность для фильтрации
+        in: query
+        name: end_value
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список солнечных панелей
+          schema:
+            items:
+              $ref: '#/definitions/lab_internal_app_ds.SolarPanel'
+            type: array
+        "400":
+          description: Некорректные параметры фильтрации
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Панели не найдены
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить список солнечных панелей
+      tags:
+      - SolarPanels
+    post:
+      consumes:
+      - application/json
+      description: Создает новую солнечную панель. Требуется роль модератора.
+      parameters:
+      - description: Данные новой панели
+        in: body
+        name: solarPanel
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.AddSolarPanel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Созданная панель
+          schema:
+            $ref: '#/definitions/lab_internal_app_ds.SolarPanel'
+        "400":
+          description: Некорректные данные
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Недостаточно прав
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Добавить новую солнечную панель (Модератор)
+      tags:
+      - SolarPanels
+  /panels/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Помечает солнечную панель как удаленную. Требуется роль модератора.
+      parameters:
+      - description: ID солнечной панели
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Панель успешно удалена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Недостаточно прав
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Панель не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Удалить солнечную панель (Модератор)
+      tags:
+      - SolarPanels
+    get:
+      consumes:
+      - application/json
+      description: Возвращает детальную информацию о конкретной солнечной панели
+      parameters:
+      - description: ID солнечной панели
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Данные солнечной панели
+          schema:
+            $ref: '#/definitions/lab_internal_app_ds.SolarPanel'
+        "404":
+          description: Панель не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить солнечную панель по ID
+      tags:
+      - SolarPanels
+    post:
+      consumes:
+      - application/json
+      description: Добавляет солнечную панель в текущую заявку пользователя (корзину)
+      parameters:
+      - description: ID солнечной панели
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Панель добавлена в заявку
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Панель уже в заявке или удалена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Панель не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Добавить панель в корзину
+      tags:
+      - SolarPanels
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные существующей солнечной панели. Требуется роль
+        модератора.
+      parameters:
+      - description: ID солнечной панели
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновленные данные панели
+        in: body
+        name: solarPanel
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.ChangeSolarPanel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обновленная панель
+          schema:
+            $ref: '#/definitions/lab_internal_app_ds.SolarPanel'
+        "400":
+          description: Некорректные данные
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Недостаточно прав
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Панель не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Изменить солнечную панель (Модератор)
+      tags:
+      - SolarPanels
+  /panels/{id}/image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Загружает изображение для солнечной панели. Требуется роль модератора.
+      parameters:
+      - description: ID солнечной панели
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Файл изображения
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Панель с обновленным изображением
+          schema:
+            $ref: '#/definitions/lab_internal_app_ds.SolarPanel'
+        "400":
+          description: Файл не найден
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Недостаточно прав
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Панель не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Загрузить изображение панели (Модератор)
+      tags:
+      - SolarPanels
+  /solarpanel-requests:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список заявок пользователя с фильтрацией по дате и статусу
+      parameters:
+      - description: 'Начальная дата (формат: dd-mm-yyyy hh:mm:ss)'
+        in: query
+        name: start_date
+        type: string
+      - description: 'Конечная дата (формат: dd-mm-yyyy hh:mm:ss)'
+        in: query
+        name: end_date
+        type: string
+      - description: Статус заявки (сформирован, завершен, отклонен)
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список заявок
+          schema:
+            items:
+              $ref: '#/definitions/lab_internal_app_DTO.SolarPanelsRequestsResponse'
+            type: array
+        "400":
+          description: Некорректный формат даты
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявки не найдены
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Получить отфильтрованные заявки
+      tags:
+      - SolarPanelRequests
+  /solarpanel-requests/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Помечает заявку как удаленную (доступно только для черновиков)
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Заявка успешно удалена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Заявка недоступна этому пользователю
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Удалить заявку
+      tags:
+      - SolarPanelRequests
+    get:
+      consumes:
+      - application/json
+      description: Возвращает детальную информацию о заявке со списком панелей
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Данные заявки
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.OneSolarPanelRequestResponse'
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Заявка недоступна этому пользователю
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Получить заявку по ID
+      tags:
+      - SolarPanelRequests
+    put:
+      consumes:
+      - application/json
+      description: Обновляет значение инсоляции для заявки со статусом черновик
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новое значение инсоляции
+        in: body
+        name: insolation
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.ChangeSolarPanelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обновленная заявка
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.OneSolarPanelRequestResponse'
+        "400":
+          description: Некорректное значение инсоляции
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Заявка недоступна этому пользователю
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Изменить инсоляцию в заявке
+      tags:
+      - SolarPanelRequests
+  /solarpanel-requests/{id}/{solarpanelId}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет солнечную панель из заявки пользователя
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID солнечной панели
+        in: path
+        name: solarpanelId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Панель успешно удалена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Заявка недоступна / Панель отсутствует
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка или панель не найдены
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Удалить панель из заявки
+      tags:
+      - RequestPanels
+    put:
+      consumes:
+      - application/json
+      description: Обновляет значение площади для панели в заявке
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID солнечной панели
+        in: path
+        name: solarpanelId
+        required: true
+        type: integer
+      - description: Новое значение площади
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.ChangeSolarPanelAreaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обновленная панель в заявке
+          schema:
+            $ref: '#/definitions/lab_internal_app_ds.RequestPanels'
+        "400":
+          description: Некорректное значение площади
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Заявка недоступна этому пользователю
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка или панель не найдены
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Изменить площадь панели в заявке
+      tags:
+      - RequestPanels
+  /solarpanel-requests/{id}/formate:
+    put:
+      consumes:
+      - application/json
+      description: Переводит заявку из статуса черновик в статус сформирован
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сформированная заявка
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.OneSolarPanelRequestResponse'
+        "400":
+          description: Некорректные данные в заявке
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Заявка недоступна этому пользователю
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Сформировать заявку
+      tags:
+      - SolarPanelRequests
+  /solarpanel-requests/{id}/moderate:
+    put:
+      consumes:
+      - application/json
+      description: Модератор завершает или отклоняет заявку. Требуется роль модератора.
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Действие модератора (завершен/отклонен)
+        in: body
+        name: action
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.ModeratorAction'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обработанная заявка
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.OneSolarPanelRequestResponse'
+        "400":
+          description: Некорректное действие
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Недостаточно прав
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Заявка не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Действие модератора (Модератор)
+      tags:
+      - SolarPanelRequests
+  /solarpanel-requests/info:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает ID текущей корзины и количество панелей в ней
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Информация о корзине
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.NumberOfPanelsResponse'
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Получить информацию о корзине
+      tags:
+      - SolarPanelRequests
+  /user:
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные текущего авторизованного пользователя
+      parameters:
+      - description: Обновленные данные пользователя
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.ChangeUserData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обновленные данные пользователя
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.UserDataResposne'
+        "400":
+          description: Некорректные данные
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Изменить данные пользователя
+      tags:
+      - Users
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает информацию о пользователе по ID
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Данные пользователя
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.UserDataResposne'
+        "401":
+          description: Не авторизован
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Пользователь не найден
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Получить данные пользователя
+      tags:
+      - Users
+  /user/registration:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя в системе
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/lab_internal_app_DTO.UserRegistration'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Данные созданного пользователя
+          schema:
+            $ref: '#/definitions/lab_internal_app_DTO.UserDataResposne'
+        "400":
+          description: Некорректные данные или пользователь уже существует
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Регистрация пользователя
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
